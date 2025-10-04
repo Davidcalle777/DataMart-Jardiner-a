@@ -1,0 +1,84 @@
+Informe Técnico
+Proceso ETL para Data Mart Jardinería
+1. Objetivo
+
+Implementar un proceso ETL robusto que extraiga, transforme y cargue datos desde la base de datos Jardinería (OLTP) hacia el Data Mart Jardinería (OLAP), respetando la estructura real del staging y del origen, preparando los datos para análisis empresarial.
+
+2. Arquitectura del Proyecto
+
+Origen: Jardinería (OLTP – Online Transaction Processing)
+Staging: Staging Jardinería (intermedio, con campos limitados)
+Destino: Data Mart Jardinería (OLAP – modelo estrella)
+
+3. Tablas del Modelo Estrella
+
+Hechos: Hechos Ventas
+
+Dimensiones: Dim Cliente, Dim Producto, Dim Tiempo, Dim Categoría
+
+4. Etapas del Proceso ETL
+➤ Extracción (E)
+
+Se extrajeron 6 tablas desde Jardinería hacia Staging Jardinería.
+
+Se validó integridad referencial y valores nulos.
+
+Campos faltantes en staging se manejan con valores por defecto en el data mart.
+
+➤ Transformación (T)
+
+Limpieza de datos con ISNULL y valores por defecto.
+
+Normalización: creación de tabla Dim Tiempo con rangos completos.
+
+Mapeo: relación de claves entre staging y data mart.
+
+➤ Carga (L)
+
+Proceso completo de truncar y cargar para asegurar consistencia.
+
+Validación de conteo de registros y consistencia.
+
+Ejecución de consultas de análisis.
+
+5. Consultas SQL Utilizadas
+
+Extracción: INSERT INTO ... SELECT FROM ...
+
+Transformación: CTE, JOIN, ISNULL, DISTINCT, DELETE
+
+Carga: INSERT INTO ... SELECT ...
+
+Análisis: GROUP BY, SUM, TOP 1, ORDER BY
+
+6. Herramientas Utilizadas
+
+Microsoft SQL Server Management Studio (SSMS)
+
+Transact-SQL (T-SQL)
+
+Modelo Estrella (OLAP)
+
+7. Resultados
+
+Data mart cargado con éxito.
+
+Datos listos para análisis: ventas, productos, clientes, tiempo.
+
+Identificado producto más vendido y tendencias mensuales.
+
+Todos los errores de columna fueron corregidos gracias a la adaptación a la estructura real de staging y origen.
+
+8. Recomendaciones Futuras
+
+Automatizar el proceso con SQL Server Agent.
+
+Implementar control de versiones con Git.
+
+Agregar auditoría de carga (fechas, usuarios, filas procesadas).
+
+Si se requieren más campos en el data mart, actualizar el staging con nuevos procesos ETL.
+
+Estructura final del proyecto:
+
+Incluye carpetas del 1 al 7 con código SQL, documentación técnica, pruebas y reportes.
