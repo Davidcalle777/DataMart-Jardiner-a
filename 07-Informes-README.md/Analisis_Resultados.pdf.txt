@@ -1,0 +1,14 @@
+1. Objetivo
+El análisis de resultados busca verificar que los datos cargados en el Data Mart Jardinería sean consistentes, completos y listos para análisis.
+
+2. Principales hallazgos
+- El proceso ETL extrajo 6 tablas desde el sistema origen (OLTP) hacia Staging.
+- Se verificó integridad referencial y manejo de valores nulos.
+- Se creó la Dim Tiempo con rangos completos y normalización de datos.
+- La Dim Cliente y Dim Producto están completas y sin inconsistencias.
+- El Data Mart permite identificar el producto más vendido y analizar tendencias mensuales.
+
+3. Conclusiones del análisis
+- Todos los datos fueron cargados correctamente en el modelo estrella.
+- Las transformaciones aplicadas aseguraron consistencia y limpieza.
+- Se puede realizar análisis de ventas, productos, clientes y tiempo sin problemas.

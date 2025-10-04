@@ -1,0 +1,7 @@
+Conclusiones del Proyecto ETL Data Mart Jardinería:
+
+1. El proceso ETL fue exitoso, con datos consistentes y completos en el Data Mart.
+2. La verificación de calidad de datos permitió corregir errores y asegurar integridad.
+3. El análisis muestra el producto más vendido y tendencias mensuales claras.
+4. Se recomienda automatizar el proceso mediante SQL Server Agent y controlar versiones con Git.
+5. Cualquier ampliación futura del Data Mart debe actualizar el Staging con ETL adicional.
