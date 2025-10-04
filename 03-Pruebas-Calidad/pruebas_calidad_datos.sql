@@ -1,0 +1,121 @@
+-- =============================================
+-- PRUEBAS DE CALIDAD DE DATOS
+-- Data Mart Jardinería
+-- =============================================
+
+USE DataMartJardineria;
+GO
+
+PRINT '=== INICIANDO PRUEBAS DE CALIDAD ===';
+PRINT '';
+
+-- PRUEBA 1: Verificar valores nulos en clientes
+PRINT '1. Verificando completitud de datos en DimCliente...';
+SELECT 
+    COUNT(*) AS TotalRegistros,
+    SUM(CASE WHEN NombreCliente IS NULL THEN 1 ELSE 0 END) AS NombresNulos,
+    CASE 
+        WHEN SUM(CASE WHEN NombreCliente IS NULL THEN 1 ELSE 0 END) = 0 
+        THEN 'APROBADO' 
+        ELSE 'RECHAZADO' 
+    END AS Estado
+FROM dbo.DimCliente;
+
+-- PRUEBA 2: Verificar valores nulos en productos
+PRINT '2. Verificando completitud de datos en DimProducto...';
+SELECT 
+    COUNT(*) AS TotalRegistros,
+    SUM(CASE WHEN NombreProducto IS NULL THEN 1 ELSE 0 END) AS NombresNulos,
+    CASE 
+        WHEN SUM(CASE WHEN NombreProducto IS NULL THEN 1 ELSE 0 END) = 0 
+        THEN 'APROBADO' 
+        ELSE 'RECHAZADO' 
+    END AS Estado
+FROM dbo.DimProducto;
+
+-- PRUEBA 3: Verificar integridad referencial (Productos)
+PRINT '3. Verificando integridad referencial HechosVentas -> DimProducto...';
+SELECT 
+    COUNT(*) AS RegistrosHuerfanos,
+    CASE 
+        WHEN COUNT(*) = 0 
+        THEN 'APROBADO' 
+        ELSE 'RECHAZADO - Hay ventas sin producto válido' 
+    END AS Estado
+FROM dbo.HechosVentas h
+LEFT JOIN dbo.DimProducto p ON h.ProductoID = p.ProductoID
+WHERE p.ProductoID IS NULL;
+
+-- PRUEBA 4: Verificar integridad referencial (Clientes)
+PRINT '4. Verificando integridad referencial HechosVentas -> DimCliente...';
+SELECT 
+    COUNT(*) AS RegistrosHuerfanos,
+    CASE 
+        WHEN COUNT(*) = 0 
+        THEN 'APROBADO' 
+        ELSE 'RECHAZADO - Hay ventas sin cliente válido' 
+    END AS Estado
+FROM dbo.HechosVentas h
+LEFT JOIN dbo.DimCliente c ON h.ClienteID = c.ID_Cliente
+WHERE c.ID_Cliente IS NULL;
+
+-- PRUEBA 5: Verificar cantidades válidas
+PRINT '5. Verificando que las cantidades sean positivas...';
+SELECT 
+    COUNT(*) AS CantidadesInvalidas,
+    CASE 
+        WHEN COUNT(*) = 0 
+        THEN 'APROBADO' 
+        ELSE 'RECHAZADO - Hay cantidades menores o iguales a cero' 
+    END AS Estado
+FROM dbo.HechosVentas
+WHERE Cantidad <= 0;
+
+-- PRUEBA 6: Verificar totales válidos
+PRINT '6. Verificando que los totales sean positivos...';
+SELECT 
+    COUNT(*) AS TotalesInvalidos,
+    CASE 
+        WHEN COUNT(*) = 0 
+        THEN 'APROBADO' 
+        ELSE 'RECHAZADO - Hay totales menores o iguales a cero' 
+    END AS Estado
+FROM dbo.HechosVentas
+WHERE Total <= 0;
+
+-- PRUEBA 7: Verificar duplicados en clientes
+PRINT '7. Verificando duplicados en DimCliente...';
+SELECT 
+    COUNT(*) - COUNT(DISTINCT ID_Cliente) AS Duplicados,
+    CASE 
+        WHEN COUNT(*) - COUNT(DISTINCT ID_Cliente) = 0 
+        THEN 'APROBADO' 
+        ELSE 'RECHAZADO - Hay IDs duplicados' 
+    END AS Estado
+FROM dbo.DimCliente;
+
+-- RESUMEN FINAL
+PRINT '';
+PRINT '=== RESUMEN DE PRUEBAS ===';
+SELECT 
+    'COMPLETITUD' AS Categoria, 
+    'DimCliente y DimProducto sin nulos' AS Descripcion,
+    'Ver resultados arriba' AS Estado
+UNION ALL
+SELECT 
+    'INTEGRIDAD',
+    'Todas las ventas tienen productos y clientes válidos',
+    'Ver resultados arriba'
+UNION ALL
+SELECT 
+    'CONSISTENCIA',
+    'Cantidades y totales son positivos',
+    'Ver resultados arriba'
+UNION ALL
+SELECT 
+    'UNICIDAD',
+    'No hay duplicados en dimensiones',
+    'Ver resultados arriba';
+
+PRINT '';
+PRINT '=== PRUEBAS COMPLETADAS ===';
