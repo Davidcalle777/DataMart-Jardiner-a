@@ -2,7 +2,7 @@
 
 ## Autores
 - Juan David Calle Correa
-- Edison Mena Arroyo
+- Edinson Mena Arroyo
 - Maria Fernanda Villada Quintero
 
 Universidad Digital de Antioquia
