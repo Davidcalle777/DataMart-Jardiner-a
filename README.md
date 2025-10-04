@@ -22,6 +22,7 @@ Proyecto completo de Data Mart con:
 - 04-Diagramas: Modelos visuales
 - 05-Backups: Instrucciones de respaldo
 - 06-Evidencias: Capturas de pantalla
+- 07-Informes:README.md
 
 ## Cómo usar
 1. Ejecutar scripts en 02-Scripts-SQL
